@@ -1,4 +1,4 @@
-
+import javax.print.DocFlavor.STRING;
 
 public class HashTagTokenizer {
 
@@ -13,14 +13,20 @@ public class HashTagTokenizer {
 		String[] dictionary = new String[3000];
 
 		In in = new In(fileName);
-
-		// Your code here
+		for(int i = 0; i < dictionary.length; i++){
+			dictionary[i] = in.readLine();
+		}
 
 		return dictionary;
 	}
 
 	public static boolean existInDictionary(String word, String []dictionary) {
-		// Your code here
+		for(int i = 0; i < dictionary.length; i++){
+			if(dictionary[i].equals(word)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static void breakHashTag(String hashtag, String[] dictionary) {
@@ -29,11 +35,22 @@ public class HashTagTokenizer {
         if (hashtag.isEmpty()) {
             return;
         }
- 
+		// Convert the hashtag to lowercase for consistent comparison
+		hashtag = hashtag.toLowerCase();
+
         int N = hashtag.length();
+		String subHash = "";
+		String nextHash = "";
 
         for (int i = 1; i <= N; i++) {
-		
+			if(existInDictionary(hashtag.substring(0 , i), dictionary)){
+				subHash = hashtag.substring(0 , i);
+				System.out.println(subHash);
+
+				nextHash =	hashtag.substring(i, N);
+				breakHashTag(nextHash, dictionary);
+				return;
+			}
         }
     }
 
